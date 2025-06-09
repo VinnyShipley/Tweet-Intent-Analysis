@@ -3,7 +3,8 @@ import re
 import emoji
 
 
-#Clean tweet function
+#################  CLEANING #######################
+
 def clean_tweet_text(text):
     if not isinstance(text, str):
         return ""
@@ -30,3 +31,17 @@ def clean_tweet_text(text):
     text = text.lower()
 
     return text 
+
+
+###################### LABELING ###################
+
+# Assign intent function
+def assign_intent(text, keywords):
+    if not isinstance(text, str):
+        return "Other"
+    
+    for intent, kws in keywords.items():
+        for kw in kws:
+            if kw in text:
+                return intent
+    return "Other"
