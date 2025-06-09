@@ -29,7 +29,4 @@ def clean_tweet_text(text):
     # Lowercase all text
     text = text.lower()
 
-    return text
-
-def preprocess_tweets(text_list):
-    return [clean_tweet_text(t) for t in text_list]   
+    return text 
