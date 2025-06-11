@@ -1,5 +1,6 @@
 import re
 import emoji
+from textblob import TextBlob
 
 
 #################  CLEANING #######################
@@ -34,7 +35,6 @@ def clean_tweet_text(text):
 
 ###################### LABELING ###################
 
-# Assign intent function
 def assign_intent(text, keywords):
     if not isinstance(text, str):
         return "Other"
@@ -52,3 +52,11 @@ def is_question(text):
     question_words = ['who', 'what', 'when', 'where', 'why']
     text = text.lower()
     return int(text.endswith('?') or any(qw in text for qw in question_words))
+
+
+################## SENTIMENT SCORE ##########################
+
+def get_sentiment_score(text):
+    if not isinstance(text, str) or not text.strip():
+        return 0.0
+    return TextBlob(text).sentiment.polarity
