@@ -1,4 +1,3 @@
-import pandas as pd
 import re
 import emoji
 
@@ -45,3 +44,11 @@ def assign_intent(text, keywords):
             if kw in text:
                 return intent
     return "Other"
+
+
+################ IS QUESTION #######################
+
+def is_question(text):
+    question_words = ['who', 'what', 'when', 'where', 'why']
+    text = text.lower()
+    return int(text.endswith('?') or any(qw in text for qw in question_words))
