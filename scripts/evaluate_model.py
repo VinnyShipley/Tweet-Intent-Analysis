@@ -1,13 +1,15 @@
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.parse import hstack, csr_matrix
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from scipy.sparse import hstack, csr_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
 
-def prepare_features_with_extras(X_train, X_test, extra_train_df, extra_test_df, extra_cols):
+def prepare_features_with_extras(X_train, X_test, extra_features_dict=None):
     
     # TF_DIF
     vectorizer = TfidfVectorizer(max_features=3000, ngram_range=(1, 2))
@@ -17,15 +19,18 @@ def prepare_features_with_extras(X_train, X_test, extra_train_df, extra_test_df,
     extras_train = []
     extras_test = []
 
-    for col in extra_cols:
-        scaler = MinMaxScaler()
-        train_scaled = scaler.fit_transform(extra_train_df[[col]])
-        test_scaled = scaler.transform(extra_test_df[[col]])
+    if extra_features_dict:
+        for feature_name, full_series in extra_features_dict.items():
+            train_series = full_series.loc[X_train.index].values.reshape(-1, 1)
+            test_series = full_series.loc[X_test.index].values.reshape(-1, 1)
 
+            scaler = MinMaxScaler()
+            train_scaled = scaler.fit_transform(train_series)
+            test_scaled = scaler.transform(test_series)
 
-        extras_train.append(csr_matrix(train_scaled))
-        extras_test.append(csr_matrix(test_scaled))
-    
+            extras_train.append(csr_matrix(train_scaled))
+            extras_test.append(csr_matrix(test_scaled))
+
     X_train_combined = hstack([X_train_tfidf] + extras_train)
     X_test_combined = hstack([X_test_tfidf] + extras_test)
 
@@ -34,24 +39,31 @@ def prepare_features_with_extras(X_train, X_test, extra_train_df, extra_test_df,
 
 
 
-def evaluate_model(y_true, y_pred, labels=None, show_confusion=True, return_dict=False):
+def evaluate_model(df, extra_feature_names=[], model=None):
+
+    if model == None:
+        model = LogisticRegression(max_iter=1000)
     
-    acc = accuracy_score(y_true, y_pred)
-    print(f"\nAccuracy: {acc:.4f}\n")
+    # Split
+    x = df['cleaned_text'].fillna("")
+    y = df["intent"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        x, y, test_size=.2, stratify=y, random_state=42
+    )
 
-    report = classification_report(y_true, y_pred, labels=labels, output_dict=return_dict, zero_division=0)
-    print("Classification Report:\n")
-    print(classification_report(y_true, y_pred, labels=labels, zero_division=0))
+    # Prepare features
+    feature_dict = {name:df[name] for name in extra_feature_names}
+    X_train_vec, X_test_vec = prepare_features_with_extras(
+        X_train, X_test, extra_features_dict=feature_dict
+    )
+    
+    # Fit model
+    model.fit(X_train_vec, y_train)
+    y_pred = model.predict(X_test_vec)
 
-    if show_confusion:
-        cm = confusion_matrix(y_true, y_pred, labels=labels)
-        plt.figure(figsize=(8, 6))
-        sns.heatmap(cm, annot=True, fmt="d", xticklabels=labels, yticklabels=labels, cmap="Blues")
-        plt.title("Confusion Matrix")
-        plt.xlabel("Predicted")
-        plt.ylabel("True")
-        plt.show()
+    # Show evaluation
+    print(f"\n=== Evaluation with features {['TF-IDF'] + extra_feature_names} ===\n")
+    print(classification_report(y_test, y_pred))
 
-    if return_dict:
-        return {"accuracy": acc, "report": report}
+    return y_test, y_train
  
