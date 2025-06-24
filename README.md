@@ -1,14 +1,32 @@
-# Tweet Intent Analysis
+# Tweet Intent Classification Project
 
-**TweetIntentAnalysis** is a mini-project focused on analyzing customer support interactions on Twitter to identify and evaluate customer intents. The project explores how well AI models classify user intents and provides tools for auditing performance using a manually labeled "golden set."
+This project explores predicting customer support intent from tweets using machine learning. The goal is to build a model that accurately classifies tweet intents such as billing issues, complaints, or praise, helping improve automated customer support systems.
 
+## Dataset
 
-## Project Goals
+The analysis uses a manually labeled "golden set" of tweets, containing around 300 examples with intent labels. This subset was chosen to ensure clean, reliable evaluation, even though the full dataset contains many more unlabeled tweets.
 
-- Analyze real-world customer service tweets
-- Identify common customer intents (e.g., billing, technical support, upgrades)
-- Create a golden set of manually labeled messages
-- Evaluate the performance of automated intent classification
-- Visualize insights and performance metrics
+## Approach
 
-Author: Vincent Shipley
+I started with a baseline text representation using TF-IDF vectorization, which captures the important words and phrases in each tweet. Then, I experimented with adding extra features like:
+
+- **Tweet length** (number of characters)  
+- **Is the tweet a question?** (binary feature)  
+- **Sentiment score** (numeric sentiment polarity)  
+
+Models were trained using logistic regression, and performance was evaluated using macro F1 scores to equally weigh all intent categories.
+
+## Results
+
+The macro F1 score improved slightly when adding sentiment as a feature, indicating that the emotional tone of tweets helps the model understand customer intent better. Adding tweet length or question detection did not significantly improve results.
+
+Breaking down performance per intent revealed that sentiment helped most with detecting complaints — which makes sense given the emotional nature of negative feedback.
+
+## Conclusion & Next Steps
+
+Sentiment is a promising additional feature for tweet intent classification, especially for emotionally charged intents like complaints. However, more data and feature experimentation is needed to boost overall accuracy.
+
+Future work could include combining multiple features, testing advanced text embeddings like BERT, and expanding the labeled dataset.
+
+## Author
+Vincent Shipley
