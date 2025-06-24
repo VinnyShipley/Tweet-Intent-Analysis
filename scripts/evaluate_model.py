@@ -59,11 +59,6 @@ def evaluate_model(df, extra_feature_names=[], model=None):
     
     # Fit model
     model.fit(X_train_vec, y_train)
-    y_pred = model.predict(X_test_vec)
-
-    # Show evaluation
-    print(f"\n=== Evaluation with features {['TF-IDF'] + extra_feature_names} ===\n")
-    print(classification_report(y_test, y_pred))
 
     return y_test, y_train
  
