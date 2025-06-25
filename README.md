@@ -26,7 +26,7 @@ Breaking down performance per intent revealed that sentiment helped most with de
 
 Sentiment is a promising additional feature for tweet intent classification, especially for emotionally charged intents like complaints. However, more data and feature experimentation is needed to boost overall accuracy.
 
-Future work could include combining multiple features, testing advanced text embeddings like BERT, and expanding the labeled dataset.
+Future work could include combining multiple features and expanding the labeled dataset. Another next step could be experimenting with contextual embeddings like BERT could significantly improve performance, especially for intents where tone and nuance matter. TF-IDF is a strong baseline, but BERT would allow the model to better understand semantic meaning.
 
 ## Author
 Vincent Shipley
