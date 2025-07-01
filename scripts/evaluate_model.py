@@ -7,6 +7,7 @@ from scipy.sparse import hstack, csr_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import pandas as pd
 
 
 def prepare_features_with_extras(X_train, X_test, extra_features_dict=None):
@@ -38,15 +39,17 @@ def prepare_features_with_extras(X_train, X_test, extra_features_dict=None):
 
 
 
-
+# Evaluates model
 def evaluate_model(df, extra_feature_names=[], model=None):
 
     if model == None:
         model = LogisticRegression(max_iter=1000)
     
     # Split
-    x = df['cleaned_text'].fillna("")
-    y = df["intent"]
+    x = df['cleaned_text'].fillna('')
+    y = df['intent']
+
+
     X_train, X_test, y_train, y_test = train_test_split(
         x, y, test_size=.2, stratify=y, random_state=42
     )
@@ -60,5 +63,26 @@ def evaluate_model(df, extra_feature_names=[], model=None):
     # Fit model
     model.fit(X_train_vec, y_train)
 
+    # Predict test set
+    y_pred = model.predict(X_test_vec)
+
+    # Confidence score creation, if model allows
+    if hasattr(model, 'predict_proba'):
+        y_proba = model.predict_proba(X_test_vec)
+        confidence_score = np.max(y_proba, axis=1)
+    else:
+        confidence_score = [None] * len(y_pred)
+
+    eval_df = pd.DataFrame({
+        'tweet_text': X_test,
+        'true_intent': y_test,
+        'predicted_intent': y_pred,
+        'confidence_score': confidence_score
+    })
+    eval_df['correct'] = eval_df['true_intent'] == eval_df['predicted_intent']
+
     return y_test, y_train
+
+
+
  
