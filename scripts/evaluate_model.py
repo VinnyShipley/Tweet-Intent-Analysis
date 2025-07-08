@@ -81,7 +81,7 @@ def evaluate_model(df, extra_feature_names=[], model=None):
     })
     eval_df['correct'] = eval_df['true_intent'] == eval_df['predicted_intent']
 
-    return y_test, y_train
+    return eval_df
 
 
 
