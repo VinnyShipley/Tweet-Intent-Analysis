@@ -81,6 +81,9 @@ def evaluate_model(df, extra_feature_names=[], model=None):
     })
     eval_df['correct'] = eval_df['true_intent'] == eval_df['predicted_intent']
 
+    for feature in extra_feature_names:
+        eval_df[feature] = df.loc[X_test.index, feature].values
+
     return eval_df
 
 
