@@ -1,32 +1,51 @@
 # Tweet Intent Classification Project
 
-This project explores predicting customer support intent from tweets using machine learning. The goal is to build a model that accurately classifies tweet intents such as billing issues, complaints, or praise, helping improve automated customer support systems.
+This project explores predicting customer support intent from tweets using machine learning. The goal is to build a model that accurately classifies tweet intents such as billing issues, complaints, or praise — helping improve automated customer support systems and agent triage.
 
 ## Dataset
 
-The analysis uses a manually labeled "golden set" of tweets, containing around 300 examples with intent labels. This subset was chosen to ensure clean, reliable evaluation, even though the full dataset contains many more unlabeled tweets.
+The analysis uses a manually labeled "golden set" of tweets, containing ~300 examples with clear intent labels. This curated subset was chosen to ensure reliable evaluation, even though the full dataset includes thousands of unlabeled tweets.
 
 ## Approach
 
-I started with a baseline text representation using TF-IDF vectorization, which captures the important words and phrases in each tweet. Then, I experimented with adding extra features like:
+I started with a baseline model using TF-IDF vectorization to capture important words and phrases in each tweet. I then explored the impact of additional features:
 
-- **Tweet length** (number of characters)  
+- **Tweet length** (character count)  
 - **Is the tweet a question?** (binary feature)  
-- **Sentiment score** (numeric sentiment polarity)  
+- **Sentiment score** (numeric polarity from text sentiment analysis)
 
-Models were trained using logistic regression, and performance was evaluated using macro F1 scores to equally weigh all intent categories.
+Each model was trained using logistic regression and evaluated with macro F1 scores to balance performance across all intent categories.
 
 ## Results
 
-The macro F1 score improved slightly when adding sentiment as a feature, indicating that the emotional tone of tweets helps the model understand customer intent better. Adding tweet length or question detection did not significantly improve results.
+Adding sentiment slightly improved macro F1 scores, especially in identifying complaints — where tone plays a key role. Tweet length and question detection had limited impact on performance.
 
-Breaking down performance per intent revealed that sentiment helped most with detecting complaints — which makes sense given the emotional nature of negative feedback.
+To support deeper analysis, each prediction was paired with a **model confidence score**, capturing how confident the classifier was in its prediction.
+
+### Sample Visual Insight:
+- Baseline model struggled with "Complaint" intent.
+- Adding sentiment boosted precision/recall in that category.
+- Confidence scores revealed that many misclassifications were low-confidence predictions, signaling opportunities for flagging edge cases.
+
+## Tableau Dashboard (In Progress)
+
+All model predictions (including confidence scores, true/predicted labels, feature values, and raw tweets) were exported to CSV for analysis in Tableau.
+
+The dashboard will allow:
+- Filtering by feature set used
+- Exploring misclassifications
+- Visualizing confidence trends across intents
+- Investigating how features like sentiment score affect prediction accuracy
 
 ## Conclusion & Next Steps
 
-Sentiment is a promising additional feature for tweet intent classification, especially for emotionally charged intents like complaints. However, more data and feature experimentation is needed to boost overall accuracy.
+This project shows that simple features like sentiment can meaningfully improve intent classification, especially for emotionally charged tweets. While TF-IDF is a solid baseline, future improvements could include:
 
-Future work could include combining multiple features and expanding the labeled dataset. Another next step could be experimenting with contextual embeddings like BERT could significantly improve performance, especially for intents where tone and nuance matter. TF-IDF is a strong baseline, but BERT would allow the model to better understand semantic meaning.
+- Expanding the labeled dataset
+- Engineering more domain-specific features
+- Incorporating contextual embeddings (e.g., **BERT**) to capture deeper meaning and nuance
 
-## Author
+This would especially help for ambiguous or sarcastic tweets where tone and word order matter.
+
+## Author  
 Vincent Shipley
