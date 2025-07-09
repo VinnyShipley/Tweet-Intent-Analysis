@@ -1,11 +1,11 @@
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+#from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from scipy.sparse import hstack, csr_matrix
 import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 import numpy as np
 import pandas as pd
 
