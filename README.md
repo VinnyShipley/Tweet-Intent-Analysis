@@ -16,15 +16,12 @@ I started with a baseline model using TF-IDF vectorization to capture important 
 
 Each model was trained using logistic regression and evaluated with macro F1 scores to balance performance across all intent categories.
 
-## Tableau Dashboard (In Progress)
+## Tableau Dashboard 
 
-All model predictions (including confidence scores, true/predicted labels, feature values, and raw tweets) were exported to CSV for analysis in Tableau.
+- View Dashboard in Tableau Public here: https://public.tableau.com/views/TweetIntentClassificationAnalysis/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
+- Dashboard Preview:
+![Tweet Intent Dashboard](./Tableau_Screenshot.png)
 
-The dashboard will allow:
-- Filtering by feature set used
-- Exploring misclassifications
-- Visualizing confidence trends across intents
-- Investigating how features like sentiment score affect prediction accuracy
 
 ## Conclusion & Next Steps
 
