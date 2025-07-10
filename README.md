@@ -16,17 +16,6 @@ I started with a baseline model using TF-IDF vectorization to capture important 
 
 Each model was trained using logistic regression and evaluated with macro F1 scores to balance performance across all intent categories.
 
-## Results
-
-Adding sentiment slightly improved macro F1 scores, especially in identifying complaints — where tone plays a key role. Tweet length and question detection had limited impact on performance.
-
-To support deeper analysis, each prediction was paired with a **model confidence score**, capturing how confident the classifier was in its prediction.
-
-### Sample Visual Insight:
-- Baseline model struggled with "Complaint" intent.
-- Adding sentiment boosted precision/recall in that category.
-- Confidence scores revealed that many misclassifications were low-confidence predictions, signaling opportunities for flagging edge cases.
-
 ## Tableau Dashboard (In Progress)
 
 All model predictions (including confidence scores, true/predicted labels, feature values, and raw tweets) were exported to CSV for analysis in Tableau.
